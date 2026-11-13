@@ -1,0 +1,57 @@
+# =====================================================================
+# .htaccess — Ce que le serveur Apache refuse au reste du monde.
+#
+# BuildWise est un dossier de travail, pas seulement un site : il contient
+# des exports SQL, une copie de référence et deux fichiers PHP sensibles.
+# Sans ces règles, n'importe quel visiteur pourrait les télécharger.
+#
+# Ce fichier ne change RIEN à l'apparence du site ni à ses fonctionnalités :
+# il filtre uniquement des adresses qu'un visiteur normal n'a jamais besoin
+# d'ouvrir. Testé avant publication (voir README-deploiement.md).
+#
+# Pour le tester chez toi : relance Apache dans XAMPP, puis ouvre
+# http://localhost/BuildWise-MySQL/backups/  → la page doit être refusée.
+# =====================================================================
+
+# Pas de liste de fichiers quand on tape une adresse de dossier.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Les trois dossiers qui ne regardent que toi.
+  RewriteRule ^(backups|_reference|database)(/|$) - [F,L]
+</IfModule>
+
+# Les fichiers d'export, de journal et de sauvegarde d'éditeur.
+<FilesMatch "\.(sql|log|bak|old|orig|ini|sh)$">
+  Require all denied
+</FilesMatch>
+
+# Les deux fichiers PHP qui contiennent un secret (empreinte du mot de passe
+# d'administration, identifiants MySQL de l'hébergeur). Le PHP du backend les
+# lit par le disque, le navigateur n'y a jamais accès.
+<FilesMatch "^(admin-credentials|env)\.php$">
+  Require all denied
+</FilesMatch>
+
+# Le guide de déploiement : il explique où sont les fichiers sensibles, il
+# n'a donc rien à faire lu par un visiteur. Il reste dans le dossier, sur
+# ton ordinateur et dans le paquet, jamais dans une page web.
+<FilesMatch "^README-deploiement\.md$">
+  Require all denied
+</FilesMatch>
+
+# Le point d'entrée de l'installation SQL, s'il traîne encore à la racine.
+<FilesMatch "^install.*\.php$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  # Le navigateur ne doit pas deviner un type de fichier à la place de PHP.
+  Header always set X-Content-Type-Options "nosniff"
+  # Le site refuse d'être enfermé dans la fenêtre d'un autre site.
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # On n'offre pas l'adresse complète de tes pages aux sites voisins.
+  Header always set Referrer-Policy "same-origin"
+</IfModule>

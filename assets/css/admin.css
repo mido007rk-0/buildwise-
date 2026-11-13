@@ -1,0 +1,102 @@
+/* =====================================================================
+   admin.css — Seulement la mise en page de la page de saisie.
+
+   Le site lui-meme (index.html) ne charge PAS ce fichier : son design
+   reste celui de BuildWise 2.0. Ces regles ajoutent ce dont la page
+   admin.html a besoin : un titre, deux colonnes, des tableaux de donnees
+   et des boutons de suppression.
+   ===================================================================== */
+
+.admin-wrap{max-width:1180px;margin:0 auto;padding:30px 22px 70px}
+
+.admin-top{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:24px}
+.admin-top h1{font-family:'Space Grotesk';font-size:clamp(28px,4vw,42px);letter-spacing:-1.6px;margin:6px 0 0}
+.admin-top p{color:var(--muted);font-size:13px;margin:9px 0 0;max-width:640px}
+.admin-links{display:flex;gap:10px;flex-wrap:wrap}
+.admin-links a{font-size:11px;font-weight:800;color:var(--emerald);border:1px solid #375846;background:#15201b;border-radius:8px;padding:11px 14px;text-decoration:none}
+.admin-links a:hover{border-color:#52ad72}
+
+/* Deux colonnes : la saisie a gauche, ce que contient la base a droite. */
+.admin-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:18px;align-items:start}
+.admin-grid .stack{display:grid;gap:18px}
+
+/* Tableaux des lignes deja en base. */
+.data-table{border:1px solid var(--stroke);border-radius:14px;overflow:hidden;margin-top:14px}
+.data-head,.data-row{display:grid;gap:12px;padding:13px 16px;font-size:11px;align-items:center}
+.data-head{background:#193227;font-size:10px;letter-spacing:1px;font-weight:800;color:#87a998}
+.data-row{border-top:1px solid var(--stroke);color:#b2c8bb;line-height:1.5}
+.data-row:nth-child(2n){background:#101b16}
+.data-row b{color:var(--emerald);font-weight:700}
+.data-row .src{margin:3px 0 0}
+
+/* Colonnes par tableau : un nom de classe court, lisible dans le HTML.
+   Le nombre de colonnes correspond exactement aux cellules fabriquées par
+   admin.js (tableau -> liste des colonnes de son en-tête). */
+.cols-component{grid-template-columns:1.7fr .8fr 1fr 1fr 1.1fr}
+.cols-price{grid-template-columns:1.4fr .9fr 1.5fr auto}
+.cols-benchmark{grid-template-columns:1.3fr 1.2fr .7fr .9fr auto}
+.cols-compat{grid-template-columns:1.2fr 1.2fr 1.6fr auto}
+.cols-config{grid-template-columns:1.4fr 1.1fr .9fr auto}
+
+/* Les cinq onglets de la page. */
+.admin-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.admin-tab{font:800 11px/1 'DM Sans',sans-serif;letter-spacing:.6px;color:#9eb7a7;background:#131f1a;
+  border:1px solid var(--stroke);border-radius:999px;padding:11px 15px;cursor:pointer}
+.admin-tab:hover{border-color:#52ad72;color:#d6efe0}
+.admin-tab.on{background:#17325f;border-color:#3f74c8;color:#e8f1ff}
+
+/* Petits boutons « Modifier » et « Historique », moins apparents que la suppression. */
+.row-edit,.row-history{border:1px solid #2e4a3b;background:#12201a;color:#9ae9bb;border-radius:7px;
+  font:800 10px/1 'DM Sans',sans-serif;letter-spacing:.6px;padding:7px 9px;cursor:pointer;margin-right:8px}
+.row-edit:hover,.row-history:hover{border-color:#52ad72}
+.row-edit:disabled,.row-history:disabled{opacity:.45;cursor:not-allowed}
+
+/* Les liens des sources de prix et de mesures restent discrets. */
+.data-row a{color:var(--emerald);text-decoration:underline}
+
+/* Les champs désactivés : « Base inaccessible », et le composant d'une ligne
+   en cours de rectification (il ne se change pas). */
+.data-row input:disabled,.admin-grid input:disabled,.admin-grid select:disabled{opacity:.6;cursor:not-allowed}
+
+/* Le petit bouton rouge de suppression, volontairement discret. */
+.row-del{border:1px solid #53303a;background:#241418;color:#ffc4cc;border-radius:7px;
+  font:800 10px/1 'DM Sans',sans-serif;letter-spacing:.6px;padding:7px 9px;cursor:pointer}
+.row-del:hover{background:#3a1d24;border-color:#7a4652}
+.row-del:disabled{opacity:.45;cursor:not-allowed}
+
+/* La cellule des boutons d'une ligne : alignée à droite, elle wrappe sur
+   petit écran sans jamais cacher la suppression. */
+.row-actions{display:inline-flex;gap:8px;justify-content:flex-end;width:100%;flex-wrap:wrap}
+
+/* Les champs techniques d'un composant, affiches selon sa famille. */
+.spec-note{font-size:11px;color:var(--muted);margin:12px 0 0;line-height:1.6}
+
+/* Ligne d'etat en haut de page : ce que la base contient, en chiffres. */
+.admin-status{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.admin-status span{font-size:11px;font-weight:700;color:#9ae9bb;border:1px solid #2e4a3b;
+  background:#12201a;border-radius:999px;padding:8px 13px}
+.admin-status span.bad{color:#ffc4cc;border-color:#5d3540;background:#241418}
+
+/* Barre de connexion administrateur, entre les compteurs et les onglets.
+   Elle n'invente aucun style : mêmes bordures, mêmes couleurs, mêmes
+   hauteurs que les chips et les boutons déjà utilisés sur cette page. */
+.admin-auth{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:11px;color:#9eb7a7;
+  border:1px solid #2e4a3b;background:#12201a;border-radius:10px;padding:12px 14px;margin-bottom:16px}
+.admin-auth.ok{color:#9ae9bb;border-color:#3f7a55}
+.admin-auth form{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.admin-auth label{font-size:10px;letter-spacing:.4px;gap:6px}
+.admin-auth input{width:260px;max-width:100%;padding:10px 12px;min-height:40px}
+.admin-auth .button{min-height:40px;padding:10px 16px}
+.admin-auth small{color:#739282;font-size:10px;line-height:1.5;flex:1;min-width:180px}
+
+@media(max-width:980px){
+  .admin-wrap{padding:22px 15px 55px}
+  .admin-grid{grid-template-columns:1fr}
+  /* Sur petit écran, chaque cellule passe à la ligne : les boutons de
+     suppression restent visibles, ce qui serait perdu avec 5 colonnes. */
+  .data-head{display:none}
+  .data-row{display:block;padding:14px 13px;font-size:11px}
+  .data-row>div{padding:4px 0}
+  .row-actions{margin-top:8px}
+  .admin-auth input{width:100%}
+}

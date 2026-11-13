@@ -1,0 +1,57 @@
+# =====================================================================
+# BuildWise 2.0 — ce qui ne part jamais sur GitHub
+# =====================================================================
+
+# --- Les identifiants MySQL reels -----------------------------------
+# backend/env.php est cree sur place depuis backend/env.example.php.
+backend/env.php
+**/env.php
+!backend/env.example.php
+
+# --- L'empreinte du mot de passe d'administration -------------------
+# Le depot ne porte que admin-credentials.example.php (empreinte vide).
+backend/admin-credentials.php
+**/admin-credentials.php
+
+# --- Les dossiers de secrets prepares localement --------------------
+CLES/
+deploiement-infinityfree/CLES/
+A-TELEVER/
+SANS-DOSSIERS/
+
+# --- Sauvegardes et exports de la base ------------------------------
+# Ils contiennent les configurations enregistrees, donc des donnees perso.
+backups/
+*.sql
+*.sql.zip
+*.bak
+# Les trois fichiers necessaires a l'installation, eux, restent publies.
+!database/buildwise.sql
+!database/buildwise-en-ligne.sql
+!database/update-*.sql
+
+# --- Les copies de travail et les methodes depassees ----------------
+_reference/
+projet-avant-deploiement/
+buildwise/
+_versions-depassees/
+FINAL/
+methode-ftp/
+methode-sans-ftp/
+zips-separees/
+env-a-remplir/
+
+# --- Outils, bases portables et traces de test ----------------------
+.tools/
+vendor/
+node_modules/
+cookies*.txt
+*.log
+.check*.json
+*.bak.php
+*.tmp
+
+# --- Systeme --------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini

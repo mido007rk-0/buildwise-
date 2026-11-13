@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a100e" />
+  <meta name="description" content="BuildWise — saisie des prix, des mesures de FPS et des constats de compatibilité dans la base MySQL." />
+  <title>BuildWise — Gestion des données (admin)</title>
+
+  <!-- styles.css = le design d'origine, inchangé. admin.css = la mise en page
+       de cette page seulement. index.html ne charge pas admin.css. -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/admin.css" />
+</head>
+<body>
+  <!-- Tout est construit par admin.js, comme dans le site principal. -->
+  <div id="admin"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- api.js et catalog.js sont les mêmes fichiers que le site : la page
+       d'administration parle à PHP exactement de la même façon. -->
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/catalog.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>
