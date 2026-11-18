@@ -1,0 +1,49 @@
+# =====================================================================
+# environment.yml — environnement Conda du projet BuildWise 2.0
+# =====================================================================
+#
+# A quoi sert cet environnement ?
+#   BuildWise est un site PHP + MySQL + Apache, piloté par du JavaScript
+#   dans le navigateur. Le dépôt ne contient AUCUN fichier Python
+#   (aucun .py, aucun notebook, aucun script d'analyse ou de test).
+#   Cet environnement est donc fourni pour le confort de développement :
+#   éditeur, langages, outils en ligne de commande. Il n'apporte aucune
+#   bibliothèque dont le site aurait besoin pour fonctionner.
+#
+# Pourquoi Python 3.11 ?
+#   Aucune version n'est imposée par le code (il n'y a pas de code Python).
+#   3.11 est choisie parce qu'elle est disponible dans les chaînes
+#   « defaults » et « conda-forge » de toutes les installations récentes
+#   de Conda, et reste maintenue jusqu'en octobre 2027. Si ton poste n'a
+#   pas ce paquet, remplace simplement « python=3.11 » par la version que
+#   ton canal propose (3.10, 3.12…) : rien d'autre ne change.
+#
+# Creation :        conda env create -f environment.yml
+# Activation :      conda activate buildwise
+# Sortie :          conda deactivate
+# Suppression :     conda env remove --name buildwise
+# Mise à jour :     conda env update --name buildwise --file environment.yml --prune
+#
+# Vérification :    conda env list   (la ligne « buildwise » doit apparaître)
+# =====================================================================
+
+name: buildwise
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # L'interpréteur, seul paquet réellement nécessaire ici.
+  - python=3.11
+
+  # pip est installé dans l'environnement pour que la commande documentée
+  #   pip install -r requirements.txt
+  # fonctionne sans dépendre d'un Python extérieur à Conda.
+  - pip
+
+  # --- Pas de paquets Python ici, volontairement ---------------------
+  # Le site n'importe aucune bibliothèque Python : la liste des besoins
+  # réels est vide, et requirements.txt le confirme. Ajouter un paquet
+  # « au cas où » ferait croire à un dépendance du projet alors qu'il
+  # n'y en a pas. Voir requirements.txt.

@@ -1,0 +1,29 @@
+# =====================================================================
+# requirements.txt — dépendances Python du projet BuildWise 2.0
+# =====================================================================
+#
+# CE FICHIER NE CONTIENT AUCUNE BIBLIOTHÈQUE, ET C'EST VOLONTAIRE.
+#
+# BuildWise est un site PHP + MySQL + Apache avec du JavaScript côté
+# navigateur. Vérification faite sur le dépôt cloné :
+#   * 0 fichier .py, 0 notebook .ipynb ;
+#   * aucun appel PHP externe à un interpréteur Python
+#     (pas de shell_exec(), exec(), system(), passthru(), proc_open()) ;
+#   * aucune référence à flask, django, pandas, numpy, requests ou
+#     jupyter dans le code, le SQL ou la documentation.
+#
+# Il n'y a donc RIEN à installer depuis PyPI pour faire tourner le projet.
+#
+# La commande ci-dessous reste demandée dans le README et fonctionne :
+#
+#     pip install -r requirements.txt
+#
+# Elle ne renvoie aucune erreur et n'installe aucun paquet, puisqu'aucun
+# n'est listé. Si tu ajoutes un jour un vrai outil Python (un script de
+# test, un importateur de données), ajoute-le ici ET dans environment.yml
+# pour que les deux listes restent cohérentes.
+#
+# Rappel : ni PHP, ni Apache, ni MySQL ne passent par ce fichier. Ils
+# s'installent avec XAMPP (voir le README, section « Installation et
+# environnement de développement »).
+# =====================================================================

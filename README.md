@@ -14,6 +14,7 @@ Settings) sont toutes là, mais elles lisent maintenant leurs données dans MySQ
 ## Table des matières
 
 * [État de TON installation](#état-de-ton-installation-vérifié-le-10-novembre-2026) — ce qui est déjà fait sur ce poste
+* [Installation et environnement de développement](#installation-et-environnement-de-développement) — clonage GitHub, environnement Conda, `requirements.txt`
 1. [Ce dont tu as besoin](#1-ce-dont-tu-as-besoin)
 2. [Installer et démarrer XAMPP](#2-installer-et-démarrer-xampp)
 3. [Placer le projet au bon endroit](#3-placer-le-projet-au-bon-endroit)
@@ -58,6 +59,140 @@ et ton outil de saisie : **<http://localhost/BuildWise-MySQL/admin.html>**.
 > `C:\xampp\mysql\bin\mysql.exe -u root -e "DROP DATABASE \`buildwise.\`;"`
 
 Le reste de ce README explique comment reproduire l'installation sur une autre machine.
+
+---
+
+## Installation et environnement de développement
+
+Cette section documente les trois étapes demandées — cloner le dépôt, créer l'environnement Conda,
+installer les dépendances Python — puis le lancement réel du site, qui lui passe par XAMPP.
+
+### Étape A — Récupérer le projet depuis GitHub
+
+```bash
+git clone https://github.com/mido007rk-0/buildwise-.git
+cd buildwise-
+```
+
+Le nom du dépôt se termine par un trait d'union (`buildwise-`) ; Git reprend ce nom pour le dossier
+qu'il crée, c'est pourquoi le `cd` se termine par le même trait d'union. Après ces deux commandes,
+tu es à la racine du projet.
+
+Ce que le clonage amène : tout le code (frontend, backend PHP, scripts SQL, documentation) et
+l'historique Git. Ce qu'il n'amène **pas** : la base de données. Une machine vierge n'a encore ni
+MySQL ni base `buildwise` — c'est l'[étape D](#étape-d--lancer-le-site-avec-xampp-php-apache-et-mysql)
+et la [section 4](#4-créer-la-base-de-données) qui s'en occupent.
+
+### Ouvrir le projet après le clonage
+
+Trois actions distinctes, selon ce que tu veux faire :
+
+| Ce que tu ouvres | Comment |
+|---|---|
+| le **code**, pour le lire ou le modifier | `code .` (VS Code) lancé depuis `buildwise-`, ou le dossier glissé dans VS Code |
+| le **dossier**, pour le copier | depuis le terminal : `start .` (Windows) ouvre l'explorateur sur le projet |
+| le **site**, pour le voir fonctionner | dans le navigateur, **jamais par double-clic sur `index.html`** : voir l'étape D |
+
+Pour qu'Apache serve le site, copie le contenu de `buildwise-` dans le dossier `htdocs` de XAMPP :
+
+```
+C:\xampp\htdocs\BuildWise-MySQL\
+```
+
+Le nom du dossier devient le début de l'adresse. En le nommant `BuildWise-MySQL`, tous les liens de
+ce README (`http://localhost/BuildWise-MySQL/…`) fonctionnent tels quels.
+
+> Tu peux aussi le laisser sous son nom de clonage (`C:\xampp\htdocs\buildwise-`) : le site marche
+> exactement pareil, il faut alors lire les adresses en `http://localhost/buildwise-/`. Rien d'autre
+> à changer, toutes les URLs internes du projet sont relatives.
+
+### Étape B — Créer et activer l'environnement virtuel Conda
+
+Conda est livré par [Miniconda](https://docs.conda.io/en/latest/miniconda.html) ou Anaconda. Une
+fois installé, depuis la racine du projet :
+
+```bash
+conda env create -f environment.yml
+conda activate buildwise
+```
+
+| Commande | Ce qu'elle fait |
+|---|---|
+| `conda env create -f environment.yml` | lit `environment.yml` à la racine et crée l'environnement nommé **`buildwise`** |
+| `conda activate buildwise` | active cet environnement : le `python` et le `pip` de ta fenêtre de commande deviennent ceux de l'environnement |
+| `conda env list` | vérification : une ligne `buildwise` doit apparaître |
+| `conda deactivate` | en sort, sans le supprimer |
+| `conda env remove --name buildwise` | le supprime |
+
+L'environnement contient **Python 3.11** et `pip`, et rien d'autre. Aucun fichier du projet n'est en
+Python (voir l'étape C), donc cette étape sert uniquement à avoir un Python isolé pour l'éditeur et
+les outils de ligne de commande. Elle est facultative pour faire tourner le site.
+
+### Étape C — Installer les dépendances Python
+
+```bash
+pip install -r requirements.txt
+```
+
+**`requirements.txt` ne liste aucune bibliothèque, et ce n'est pas un oubli.** Le contrôle a été fait
+sur le dépôt cloné :
+
+* 0 fichier `.py` et 0 notebook `.ipynb` dans tout le projet ;
+* aucun appel depuis le PHP vers un programme extérieur (pas de `shell_exec`, `exec`, `system`,
+  `passthru` ni `proc_open` dans `backend/`) ;
+* aucune trace de `flask`, `django`, `pandas`, `numpy`, `requests` ou `jupyter` dans le code, le SQL
+  ou la documentation.
+
+La commande ci-dessus reste dans la procédure parce qu'elle doit fonctionner le jour où un vrai outil
+Python s'ajouterait au projet. Aujourd'hui, elle se termine sans erreur et sans rien installer,
+puisqu'il n'y a rien à installer. Si tu ajoutes un paquet, ajoute-le **à la fois** dans
+`requirements.txt` et dans `environment.yml` pour que les deux listes restent cohérentes.
+
+### Étape D — Lancer le site avec XAMPP, PHP, Apache et MySQL
+
+Le site ne se lance pas avec Conda. Il a besoin d'un serveur, et c'est XAMPP qui l'apporte :
+
+1. Installe [XAMPP](https://www.apachefriends.org/) (PHP 8.0 minimum, 8.1 ou plus récent conseillé) —
+   [section 2](#2-installer-et-démarrer-xampp).
+2. Dans **XAMPP Control Panel**, clique **Start** sur **Apache**, puis sur **MySQL**.
+3. Copie le projet cloné dans `C:\xampp\htdocs\BuildWise-MySQL` — [section 3](#3-placer-le-projet-au-bon-endroit).
+4. Importe `database/buildwise.sql` dans <http://localhost/phpmyadmin> : il crée la base `buildwise`,
+   ses 6 tables et ses 32 composants — [section 4](#4-créer-la-base-de-données).
+5. Laisse `backend/config.php` tel quel (les réglages par défaut de XAMPP conviennent) —
+   [section 5](#5-configurer-la-connexion-php).
+6. Ouvre <http://localhost/BuildWise-MySQL/backend/check.php> : les 31 tests doivent être verts —
+   [section 7](#7-vérifier-que-tout-fonctionne).
+7. Ouvre <http://localhost/BuildWise-MySQL/> pour le site et
+   <http://localhost/BuildWise-MySQL/admin.html> pour la saisie des prix et des FPS.
+
+### Ce que Conda ne remplace PAS
+
+> **Conda sert uniquement à l'environnement Python.** Il n'installe ni PHP, ni Apache, ni MySQL/MariaDB,
+> et ne démarre aucun serveur web. Ces trois logiciels viennent de **XAMPP** et de rien d'autre.
+>
+> Autrement dit : un environnement Conda parfaitement vide n'empêche pas BuildWise de fonctionner —
+> tant qu'Apache et MySQL tournent. Une erreur classique est de croire que `conda activate buildwise`
+> suffit à ouvrir le site : il faut l'étape D.
+
+### Récapitulatif, dans l'ordre exact
+
+```bash
+# A. Récupérer le projet
+git clone https://github.com/mido007rk-0/buildwise-.git
+cd buildwise-
+
+# B. Environnement Python isolé (facultatif pour faire tourner le site)
+conda env create -f environment.yml
+conda activate buildwise
+
+# C. Dépendances Python : aucune, la commande ne doit rien installer
+pip install -r requirements.txt
+
+# D. Le vrai lancement : XAMPP Control Panel → Start sur Apache et MySQL,
+#    copier ce dossier dans C:\xampp\htdocs\BuildWise-MySQL,
+#    importer database/buildwise.sql dans phpMyAdmin,
+#    puis ouvrir http://localhost/BuildWise-MySQL/backend/check.php
+```
 
 ---
 
